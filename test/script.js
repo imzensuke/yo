@@ -67,13 +67,13 @@ async function switchNetwork(selectedNetwork) {
 document.getElementById("eth-network").addEventListener("click", async () => {
     selectedNetwork = "ethereum";
     const ethChainId = 1; // Mainnet Ethereum chain ID
-    switchNetwork(ethChainId);
+    switchNetwork(selectedNetwork);
 });
 
 document.getElementById("bnb-network").addEventListener("click", async () => {
     selectedNetwork = "shib";
     const bnbChainId = 109; // Mainnet Binance Smart Chain ID
-    switchNetwork(bnbChainId);
+    switchNetwork(selectedNetwork);
 });
 
 // Function to buy tickets
