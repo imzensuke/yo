@@ -113,9 +113,11 @@ document.getElementById('buy-ticket-btn').addEventListener('click', () => {
     const currentNetwork = await ethWeb3.eth.net.getId();
     if (currentNetwork === networkIds.eth) {
         activeContract = new ethWeb3.eth.Contract(ethContractABI, ethContractAddress);
+        activeToken = new ethWeb3.eth.Contract(tokenABI, shibEthAddress);
         console.log("Connected to Ethereum network");
     } else if (currentNetwork === networkIds.shib) {
         activeContract = new shibWeb3.eth.Contract(shibContractABI, shibContractAddress);
+        activeToken = new shibWeb3.eth.Contract(tokenABI, shibShibAddress);
         console.log("Connected to Shibarium network");
     }
 })();
