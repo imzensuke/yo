@@ -64,22 +64,51 @@ document.getElementById('network-select').addEventListener('change', (event) => 
     switchNetwork(selectedNetwork);
 });
 
-// Listen for ticket purchases and interact with the active contract
-async function listenForTicketPurchases() {
-    if (activeContract) {
-        activeContract.events.TicketPurchased()
-            .on('data', (event) => {
-                const { participant, count } = event.returnValues;
-                console.log(`Ticket purchased by ${participant}, Number of tickets: ${count}`);
-                // Additional logic to handle ticket purchase, update UI, etc.
-            })
-            .on('error', (error) => {
-                console.error("Error listening for ticket purchases:", error);
-            });
-    } else {
+// Function to buy tickets
+async function buyTickets(ticketCount) {
+    if (!activeContract) {
         console.error("No active contract selected.");
+        return;
+    }
+
+    // Get the user's address (from MetaMask)
+    const accounts = await ethWeb3.eth.getAccounts();
+    const userAddress = accounts[0];
+
+    // Ensure the user has selected a valid ticket count
+    if (ticketCount <= 0) {
+        alert("Please select a valid number of tickets.");
+        return;
+    }
+
+    // Estimate the gas required for the transaction
+    try {
+        const ticketPrice = await activeContract.methods.ticketPrice().call(); // Get ticket price from the contract
+        const totalAmount = ticketPrice * ticketCount; // Calculate total cost
+
+        // Prepare the transaction to buy tickets
+        const tx = activeContract.methods.buyTickets(ticketCount).send({from: userAddress}); // Assuming `buyTickets` is a function in your contract
+
+        const gas = await tx.estimateGas({ from: userAddress, value: totalAmount }); // Estimate gas with value for payment
+        const data = tx.encodeABI(); // Encode the transaction data
+
+        // Send the transaction
+        const receipt = await ethWeb3.eth.sendSignedTransaction(signedTx.rawTransaction);
+        console.log("Ticket purchase successful:", receipt.transactionHash);
+
+        // Notify the user
+        alert(`Tickets purchased successfully. Transaction Hash: ${receipt.transactionHash}`);
+    } catch (error) {
+        console.error("Error buying tickets:", error);
+        alert("An error occurred while buying tickets. Please try again.");
     }
 }
+
+// Example usage: Buy 5 tickets
+document.getElementById('buy-ticket-btn').addEventListener('click', () => {
+    const ticketCount = parseInt(document.getElementById('ticket-count').value); // Get ticket count from input field
+    buyTickets(ticketCount); // Call the function to buy tickets
+});
 
 // Initialize the page by setting up the default network and contract
 (async () => {
@@ -91,7 +120,4 @@ async function listenForTicketPurchases() {
         activeContract = new shibWeb3.eth.Contract(shibContractABI, shibContractAddress);
         console.log("Connected to Shibarium network");
     }
-
-    // Start listening for ticket purchases
-    listenForTicketPurchases();
 })();
