@@ -80,7 +80,6 @@
 const web3Eth = new Web3(window.ethereum);  // Ethereum
 const web3Bsc = new Web3("https://bsc-dataseed.binance.org/");  // BNB Chain
 
-let contractEth, contractBsc;
 let selectedNetwork = 'eth';  // Default to Ethereum
 
 // Sample contract ABI and addresses for demo purposes
@@ -135,6 +134,56 @@ document.getElementById('check-door').addEventListener('click', async () => {
         console.error('Error fetching door ID:', err);
     }
 });
+
+// Handle network switch
+document.getElementById('network-select').addEventListener('change', async (event) => {
+    const selectedNetwork = event.target.value;
+    
+    // Check the current network
+    const currentNetwork = await web3Eth.eth.net.getId();
+    
+    // Define network IDs (for example, Ethereum = 1, BNB Chain = 56)
+    const networkIds = {
+        eth: 1,  // Ethereum mainnet ID
+        bsc: 56, // BNB Chain mainnet ID
+    };
+    
+    // If the user selects Ethereum (ETH)
+    if (selectedNetwork === 'eth' && currentNetwork !== networkIds.eth) {
+        try {
+            // Request MetaMask to switch to Ethereum
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x1' }], // 0x1 is the chainId for Ethereum Mainnet
+            });
+        } catch (error) {
+            console.error("Error switching to Ethereum:", error);
+            alert("Please make sure you have the Ethereum network added in MetaMask.");
+        }
+    }
+    
+    // If the user selects BNB Chain (BSC)
+    if (selectedNetwork === 'bsc' && currentNetwork !== networkIds.bsc) {
+        try {
+            // Request MetaMask to switch to BNB Chain
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x38' }], // 0x38 is the chainId for BNB Chain Mainnet
+            });
+        } catch (error) {
+            console.error("Error switching to BNB Chain:", error);
+            alert("Please make sure you have the BNB Chain network added in MetaMask.");
+        }
+    }
+    
+    // Update the Web3 provider based on selected network
+    if (selectedNetwork === 'eth') {
+        web3Eth.setProvider(window.ethereum); // Switch to Ethereum provider
+    } else if (selectedNetwork === 'bsc') {
+        web3Bsc.setProvider(window.ethereum); // Switch to BNB Chain provider
+    }
+});
+
 
 // Show tickets sold with user's tickets for BSC
 document.getElementById('ticket-info').addEventListener('click', async () => {
