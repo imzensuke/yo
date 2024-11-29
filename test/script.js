@@ -103,7 +103,7 @@ async function buyTickets(ticketCount) {
 }
 
 // Example usage: Buy 5 tickets
-document.getElementById('buy-ticket-btn').addEventListener('click', () => {
+document.getElementById('buy-ticket').addEventListener('click', () => {
     const ticketCount = parseInt(document.getElementById('ticket-count').value); // Get ticket count from input field
     buyTickets(ticketCount); // Call the function to buy tickets
 });
