@@ -87,17 +87,10 @@ async function buyTickets(ticketCount) {
         const totalAmount = ticketPrice * ticketCount; // Calculate total cost
 
         // Prepare the transaction to buy tickets
-        const tx = activeContract.methods.buyTickets(ticketCount).send({from: userAddress}); // Assuming `buyTickets` is a function in your contract
-
-        const gas = await tx.estimateGas({ from: userAddress, value: totalAmount }); // Estimate gas with value for payment
-        const data = tx.encodeABI(); // Encode the transaction data
-
-        // Send the transaction
-        const receipt = await ethWeb3.eth.sendSignedTransaction(signedTx.rawTransaction);
-        console.log("Ticket purchase successful:", receipt.transactionHash);
-
-        // Notify the user
-        alert(`Tickets purchased successfully. Transaction Hash: ${receipt.transactionHash}`);
+        const tx = activeContract.methods.buyTickets(ticketCount).send({from: userAddress}).then( function (result) {
+            console.log(result);
+            alert("Bought tickets!");
+        });// Assuming `buyTickets` is a function in your contract
     } catch (error) {
         console.error("Error buying tickets:", error);
         alert("An error occurred while buying tickets. Please try again.");
