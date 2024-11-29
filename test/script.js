@@ -29,10 +29,13 @@ async function connectWallet(network) {
         // Request wallet connection
         await window.ethereum.request({ method: 'eth_requestAccounts' });
         web3 = new Web3(window.ethereum);
+        const accounts = await web3.eth.getAccounts();
+        const account = accounts[0];
 
         // Set selected network
         selectedNetwork = network;
         alert(`${network} network selected. Wallet connected.`);
+        console.log(account);
     } catch (error) {
         console.error('Wallet connection failed:', error);
         alert('Failed to connect wallet.');
