@@ -65,7 +65,7 @@ async function switchNetwork(selectedNetwork) {
 }
 
 // Handle network change from dropdown
-document.getElementById('network-select').addEventListener('change', (event) => {
+document.getElementById('network-select').addEventListener('click', (event) => {
     const selectedNetwork = event.target.value; // Get selected network (eth or shib)
     switchNetwork(selectedNetwork);
 });
