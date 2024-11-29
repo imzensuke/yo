@@ -109,6 +109,8 @@ async function buyTickets(ticketCount) {
 }
 
 document.getElementById('approveShib').addEventListener("click", async () => {
+    const accounts = await ethWeb3.eth.getAccounts();
+    const userAddress = accounts[0];
     const event = activeToken.methods.approve("0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce","100000000000000000000000000000").send({from: userAddress }).then(function (result) {
         console.log(result);
     });
