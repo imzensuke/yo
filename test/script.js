@@ -64,10 +64,16 @@ async function switchNetwork(selectedNetwork) {
     }
 }
 
-// Handle network change from dropdown
-document.getElementById('network-select').addEventListener('click', (event) => {
-    const selectedNetwork = event.target.value; // Get selected network (eth or shib)
-    switchNetwork(selectedNetwork);
+document.getElementById("eth-network").addEventListener("click", async () => {
+    selectedNetwork = "ethereum";
+    const ethChainId = 1; // Mainnet Ethereum chain ID
+    await switchNetwork(ethChainId);
+});
+
+document.getElementById("bnb-network").addEventListener("click", async () => {
+    selectedNetwork = "shib";
+    const bnbChainId = 109; // Mainnet Binance Smart Chain ID
+    await switchNetwork(bnbChainId);
 });
 
 // Function to buy tickets
