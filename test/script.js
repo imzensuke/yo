@@ -1,82 +1,89 @@
-// Import Web3.js
+// Web3 Initialization
 let web3;
+let selectedNetwork = '';
+
+// Contract addresses for Ethereum and Binance Smart Chain
+const ETH_CONTRACT_ADDRESS = '0xYourEthereumContractAddress';
+const BNB_CONTRACT_ADDRESS = '0xYourBinanceContractAddress';
+
+// ABI (replace this with your actual ABI)
+const CONTRACT_ABI = [
+    // Add your contract ABI here
+];
 
 // DOM Elements
-const chainSelector = document.getElementById("chain-selector");
-const connectWalletBtn = document.getElementById("connect-wallet");
-const walletAddressEl = document.getElementById("wallet-address");
-const buyTicketsBtn = document.getElementById("buy-tickets");
-const ticketAmountInput = document.getElementById("ticket-amount");
-const raffleStatusEl = document.getElementById("raffle-status");
-const totalTicketsEl = document.getElementById("total-tickets");
-const latestWinnerEl = document.getElementById("latest-winner");
+const ticketCountInput = document.getElementById('ticket-count');
+const statusValue = document.getElementById('status-value');
+const ethNetworkButton = document.getElementById('eth-network');
+const bnbNetworkButton = document.getElementById('bnb-network');
+const buyTicketsButton = document.getElementById('buy-tickets');
 
-// App State
-let selectedChain = "1"; // Default to Ethereum
-let walletAddress = "";
-
-// Chain Selector
-chainSelector.addEventListener("change", (e) => {
-  selectedChain = e.target.value;
-  console.log(`Selected Chain: ${selectedChain}`);
-});
-
-// Connect Wallet
-connectWalletBtn.addEventListener("click", async () => {
-  if (window.ethereum) {
-    web3 = new Web3(window.ethereum);
-    try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      walletAddress = accounts[0];
-      walletAddressEl.textContent = `Wallet Address: ${walletAddress}`;
-    } catch (error) {
-      console.error("Wallet connection failed", error);
+// Connect to Metamask and set network
+async function connectWallet(network) {
+    if (typeof window.ethereum === 'undefined') {
+        alert('Please install MetaMask!');
+        return;
     }
-  } else {
-    alert("MetaMask is not installed!");
-  }
-});
 
-// Buy Tickets
-buyTicketsBtn.addEventListener("click", async () => {
-  if (!walletAddress) {
-    alert("Please connect your wallet first!");
-    return;
-  }
+    try {
+        // Request wallet connection
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        web3 = new Web3(window.ethereum);
 
-  const ticketAmount = parseInt(ticketAmountInput.value);
-  if (isNaN(ticketAmount) || ticketAmount <= 0) {
-    alert("Enter a valid ticket amount!");
-    return;
-  }
+        // Set selected network
+        selectedNetwork = network;
+        alert(`${network} network selected. Wallet connected.`);
+    } catch (error) {
+        console.error('Wallet connection failed:', error);
+        alert('Failed to connect wallet.');
+    }
+}
 
-  // Example: Contract ABI and Address (Replace these)
-  const contractABI = []; // Your contract ABI here
-  const contractAddress =
-    selectedChain === "1"
-      ? "0xYourEthereumContractAddress"
-      : "0xYourBNBContractAddress";
+// Interact with the selected contract
+async function buyTickets() {
+    if (statusValue.innerText !== 'Live') {
+        alert('The raffle is currently paused. Please try again later!');
+        return;
+    }
 
-  try {
-    const contract = new web3.eth.Contract(contractABI, contractAddress);
-    const ticketPrice = web3.utils.toWei("0.01", "ether"); // Replace with your ticket price logic
-    const totalCost = ticketPrice * ticketAmount;
+    const ticketCount = parseInt(ticketCountInput.value, 10);
+    if (isNaN(ticketCount) || ticketCount <= 0) {
+        alert('Please enter a valid number of tickets.');
+        return;
+    }
 
-    const tx = await contract.methods.buyTickets(ticketAmount).send({
-      from: walletAddress,
-      value: totalCost,
-    });
+    if (!web3) {
+        alert('Please connect your wallet first.');
+        return;
+    }
 
-    console.log("Transaction successful", tx);
-    alert("Tickets purchased successfully!");
+    const contractAddress =
+        selectedNetwork === 'Ethereum'
+            ? ETH_CONTRACT_ADDRESS
+            : BNB_CONTRACT_ADDRESS;
 
-    // Update UI (example)
-    raffleStatusEl.textContent = "Status: Active";
-    totalTicketsEl.textContent = "Total Tickets Bought: Updated";
-  } catch (error) {
-    console.error("Transaction failed", error);
-    alert("Failed to buy tickets!");
-  }
-});
+    const contract = new web3.eth.Contract(CONTRACT_ABI, contractAddress);
+
+    try {
+        const accounts = await web3.eth.getAccounts();
+        const account = accounts[0];
+
+        // Call the smart contract method to buy tickets
+        const ticketPrice = await contract.methods.ticketPrice().call(); // Adjust if ticket price is a variable
+        const totalCost = ticketPrice * ticketCount;
+
+        await contract.methods
+            .buyTickets(ticketCount)
+            .send({ from: account, value: totalCost });
+
+        alert(`Successfully bought ${ticketCount} ticket(s)!`);
+    } catch (error) {
+        console.error('Error during ticket purchase:', error);
+        alert('Failed to buy tickets. Please try again.');
+    }
+}
+
+// Event Listeners
+ethNetworkButton.addEventListener('click', () => connectWallet('Ethereum'));
+bnbNetworkButton.addEventListener('click', () => connectWallet('Binance Smart Chain'));
+buyTicketsButton.addEventListener('click', buyTickets);
