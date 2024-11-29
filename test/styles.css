@@ -1,118 +1,111 @@
-/* Reset and Body Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+}
+
 body {
-  font-family: 'Poppins', Arial, sans-serif;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-  margin: 0;
-  padding: 0;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+    background-color: #181818;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
 
-/* Main Container */
-.container {
-  max-width: 600px;
-  width: 90%;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  text-align: center;
+header {
+    background-color: #282828;
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #ff4ff3;
 }
 
-/* Title */
-.title {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  color: #ffd700; /* Golden color for emphasis */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+main {
+    padding: 20px;
+    max-width: 800px;
+    width: 90%;
 }
 
-/* Section Styling */
-.section {
-  margin: 20px 0;
-  text-align: left;
+.raffle-info {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.section label {
-  display: block;
-  font-size: 1.1rem;
-  margin-bottom: 8px;
+.status {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #00ff00;
 }
 
-.section input,
-.section select {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  margin-top: 5px;
-  background: #fff;
-  color: #333;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.ticket-section {
+    background-color: #282828;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.section select {
-  appearance: none;
-  cursor: pointer;
-  background: linear-gradient(135deg, #ffffff, #f1f1f1);
+.ticket-section .form-group {
+    margin-bottom: 15px;
 }
 
-/* Buttons */
+.ticket-section label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.ticket-section input {
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
 .btn {
-  padding: 12px 20px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  background: linear-gradient(135deg, #ff7e5f, #feb47b);
-  color: #fff;
-  transition: transform 0.2s, box-shadow 0.2s;
+    background-color: #ff4ff3;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(255, 126, 95, 0.5);
+    background-color: #ff79f7;
 }
 
-/* Info Text */
-.info {
-  margin-top: 10px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #dcdcdc;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+.network-selection {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-/* Raffle Details Section */
-h2 {
-  font-size: 1.8rem;
-  color: #ffd700; /* Golden color */
-  margin-bottom: 15px;
+.network-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 
-p.info {
-  font-size: 1.1rem;
-  line-height: 1.5;
+#winners-list {
+    background-color: #282828;
+    padding: 15px;
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
-/* Media Queries for Responsiveness */
-@media (max-width: 768px) {
-  .title {
-    font-size: 2rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-  }
-
-  .btn {
-    font-size: 1rem;
-  }
+footer {
+    margin-top: auto;
+    text-align: center;
+    background-color: #282828;
+    padding: 10px 0;
+    width: 100%;
+    color: #ffffff;
+    font-size: 0.9rem;
 }
