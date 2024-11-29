@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multichain Raffle</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Multichain Raffle</h1>
+
+    <!-- Chain Selector -->
+    <div class="section">
+      <label for="chain-selector">Select Chain:</label>
+      <select id="chain-selector">
+        <option value="1">Ethereum</option>
+        <option value="56">BNB Chain</option>
+      </select>
+    </div>
+
+    <!-- Wallet Connector -->
+    <div class="section">
+      <button id="connect-wallet" class="btn">Connect Wallet</button>
+      <p id="wallet-address" class="info"></p>
+    </div>
+
+    <!-- Ticket Purchase -->
+    <div class="section">
+      <label for="ticket-amount">Number of Tickets:</label>
+      <input id="ticket-amount" type="number" min="1" value="1">
+      <button id="buy-tickets" class="btn">Buy Tickets</button>
+    </div>
+
+    <!-- Raffle Details -->
+    <div class="section">
+      <h2>Raffle Details</h2>
+      <p id="raffle-status" class="info">Status: Paused</p>
+      <p id="total-tickets" class="info">Total Tickets Bought: 0</p>
+      <p id="latest-winner" class="info">Latest Winner: None</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
