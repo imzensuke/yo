@@ -1,46 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multichain Raffle</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultiChain JamAdvent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-  <div class="container">
-    <h1 class="title">Multichain Raffle</h1>
+    <header>
+        <div class="logo">🎟️ JamAdvent</div>
+    </header>
+    <main>
+        <section class="raffle-info">
+            <h1>Join the Raffle!</h1>
+            <p>Buy tickets with Ethereum or Shibarium Chain. Win amazing prizes!</p>
+            <div class="status">
+                <span id="status-label">Status:</span>
+                <span id="status-value">Live</span>
+            </div>
+        </section>
 
-    <!-- Chain Selector -->
-    <div class="section">
-      <label for="chain-selector">Select Chain:</label>
-      <select id="chain-selector">
-        <option value="1">Ethereum</option>
-        <option value="56">BNB Chain</option>
-      </select>
-    </div>
+        <section class="ticket-section">
+            <div class="form-group">
+                <label for="ticket-count">Number of Tickets:</label>
+                <input type="number" id="ticket-count" min="1" value="1">
+            </div>
+            <button id="buy-tickets" class="btn">Buy Tickets</button>
+        </section>
 
-    <!-- Wallet Connector -->
-    <div class="section">
-      <button id="connect-wallet" class="btn">Connect Wallet</button>
-      <p id="wallet-address" class="info"></p>
-    </div>
+        <section class="network-selection">
+            <h2>Select Your Network</h2>
+            <div class="network-buttons">
+                <button class="btn" id="eth-network">Ethereum</button>
+                <button class="btn" id="bnb-network">Shibarium Chain</button>
+            </div>
+        </section>
 
-    <!-- Ticket Purchase -->
-    <div class="section">
-      <label for="ticket-amount">Number of Tickets:</label>
-      <input id="ticket-amount" type="number" min="1" value="1">
-      <button id="buy-tickets" class="btn">Buy Tickets</button>
-    </div>
-
-    <!-- Raffle Details -->
-    <div class="section">
-      <h2>Raffle Details</h2>
-      <p id="raffle-status" class="info">Status: Paused</p>
-      <p id="total-tickets" class="info">Total Tickets Bought: 0</p>
-      <p id="latest-winner" class="info">Latest Winner: None</p>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+        <section class="winner-info">
+            <h2>Previous Winners</h2>
+            <div id="winners-list"></div>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 MultiChain Raffle</p>
+    </footer>
 </body>
 </html>
