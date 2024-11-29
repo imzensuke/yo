@@ -47,6 +47,8 @@ document.getElementById("eth-network").addEventListener("click", async () => {
     selectedNetwork = "ethereum";
     const ethChainId = 1; // Mainnet Ethereum chain ID
     await checkAndSwitchNetwork(ethChainId);
+
+    document.getElementById("doorDetails").innerHTML = "SWITCH TO Shibarium for Details..."
 });
 
 document.getElementById("bnb-network").addEventListener("click", async () => {
