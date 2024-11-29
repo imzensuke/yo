@@ -4,52 +4,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MultiChain Raffle</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
-    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        input, select {
+            padding: 10px;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #raffle-info, #ticket-info {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1 class="logo">🎟️ MultiChain Raffle</h1>
-        </div>
-    </header>
-    <main class="container">
-        <section class="raffle-info">
-            <h2>Join the Raffle!</h2>
-            <p>Buy tickets using Ethereum or Binance Smart Chain. Win amazing prizes!</p>
-            <div class="status">
-                <strong>Status:</strong> <span id="status-value" class="status-live">Live</span>
-            </div>
-        </section>
 
-        <section class="ticket-section">
-            <h3>Buy Tickets</h3>
-            <div class="form-group">
-                <label for="ticket-count">Number of Tickets:</label>
-                <input type="number" id="ticket-count" min="1" value="1">
-            </div>
-            <button id="buy-tickets" class="btn">Buy Tickets</button>
-        </section>
+<div class="container">
+    <h2>MultiChain Raffle</h2>
+    <p>Select a network to interact with:</p>
+    <select id="network-select">
+        <option value="eth">Ethereum</option>
+        <option value="bsc">BNB Chain</option>
+    </select>
 
-        <section class="network-selection">
-            <h3>Select Your Network</h3>
-            <div class="network-buttons">
-                <button class="btn network-btn" id="eth-network">Ethereum</button>
-                <button class="btn network-btn" id="bnb-network">Binance Smart Chain</button>
-            </div>
-        </section>
+    <p>Enter the number of tickets you'd like to buy:</p>
+    <input type="number" id="ticket-count" min="1" placeholder="Enter number of tickets" />
 
-        <section class="winner-info">
-            <h3>Previous Winners</h3>
-            <div id="winners-list" class="winners-list">
-                <p>No winners yet!</p>
-            </div>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 MultiChain Raffle. All rights reserved.</p>
-    </footer>
+    <div class="button" id="buy-tickets">Buy Tickets</div>
+
+    <div class="result" id="raffle-info"></div>
+    <div class="result" id="ticket-info"></div>
+
+    <div class="button" id="check-door">Check Door ID</div>
+    <div class="result" id="door-info"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/web3modal"></script>
+
+<script>
+// JavaScript to interact with Web3
+const web3Eth = new Web3(window.ethereum);  // Ethereum
+const web3Bsc = new Web3("https://bsc-dataseed.binance.org/");  // BNB Chain
+
+let contractEth, contractBsc;
+let selectedNetwork = 'eth';  // Default to Ethereum
+
+// Sample contract ABI and addresses for demo purposes
+const ethContractABI = [...];  // Ethereum contract ABI
+const bscContractABI = [...];  // BNB Chain contract ABI
+const ethContractAddress = '0x...';  // Ethereum contract address
+const bscContractAddress = '0x...';  // BNB Chain contract address
+
+// Set up contracts
+const contractEth = new web3Eth.eth.Contract(ethContractABI, ethContractAddress);
+const contractBsc = new web3Bsc.eth.Contract(bscContractABI, bscContractAddress);
+
+// Handle network switch
+document.getElementById('network-select').addEventListener('change', (event) => {
+    selectedNetwork = event.target.value;
+});
+
+// Buy tickets function
+document.getElementById('buy-tickets').addEventListener('click', async () => {
+    const ticketCount = document.getElementById('ticket-count').value;
+    if (ticketCount < 1) {
+        alert('Please enter a valid number of tickets.');
+        return;
+    }
+
+    try {
+        const accounts = await web3Eth.eth.getAccounts();
+
+        if (selectedNetwork === 'eth') {
+            await contractEth.methods.buyTicket(ticketCount).send({ from: accounts[0] });
+            document.getElementById('raffle-info').innerHTML = `Tickets bought on Ethereum: ${ticketCount}`;
+        } else if (selectedNetwork === 'bsc') {
+            await contractBsc.methods.buyTicket(ticketCount).send({ from: accounts[0] });
+            document.getElementById('raffle-info').innerHTML = `Tickets bought on BNB Chain: ${ticketCount}`;
+        }
+    } catch (err) {
+        console.error('Error while buying tickets:', err);
+    }
+});
+
+// Check door ID function
+document.getElementById('check-door').addEventListener('click', async () => {
+    try {
+        if (selectedNetwork === 'eth') {
+            const doorId = await contractEth.methods.currentRaffleId().call();
+            document.getElementById('door-info').innerHTML = `Ethereum Door ID: ${doorId}`;
+        } else if (selectedNetwork === 'bsc') {
+            const doorId = await contractBsc.methods.currentRaffleId().call();
+            document.getElementById('door-info').innerHTML = `BNB Chain Door ID: ${doorId}`;
+        }
+    } catch (err) {
+        console.error('Error fetching door ID:', err);
+    }
+});
+
+// Show tickets sold with user's tickets for BSC
+document.getElementById('ticket-info').addEventListener('click', async () => {
+    try {
+        const accounts = await web3Eth.eth.getAccounts();
+        const userAddress = accounts[0];
+        if (selectedNetwork === 'bsc') {
+            const totalTicketsSold = await contractBsc.methods.totalEntries().call();
+            const userTickets = await contractBsc.methods.ticketsBought(userAddress).call();
+            document.getElementById('ticket-info').innerHTML = `Total Tickets Sold: ${totalTicketsSold} | Your Tickets: ${userTickets}`;
+        }
+    } catch (err) {
+        console.error('Error fetching ticket info:', err);
+    }
+});
+
+</script>
+
 </body>
 </html>
