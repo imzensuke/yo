@@ -65,7 +65,7 @@ async function switchNetwork(selectedNetwork) {
 }
 
 document.getElementById("eth-network").addEventListener("click", async () => {
-    selectedNetwork = "ethereum";
+    selectedNetwork = "eth";
     const ethChainId = 1; // Mainnet Ethereum chain ID
     switchNetwork(selectedNetwork);
 });
