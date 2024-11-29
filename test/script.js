@@ -98,7 +98,7 @@ async function buyTickets(ticketCount) {
         const ticketPrice = await activeContract.methods.ticketPrice().call(); // Get ticket price from the contract
 
         // Prepare the transaction to buy tickets
-        const tx = activeContract.methods.buyTickets(ticketCount).send({from: userAddress}).then( function (result) {
+        const tx = activeContract.methods.buyTicket(ticketCount).send({from: userAddress}).then( function (result) {
             console.log(result);
             alert("Bought tickets!");
         });// Assuming `buyTickets` is a function in your contract
