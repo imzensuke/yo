@@ -3,13 +3,17 @@ const ethWeb3 = new Web3(window.ethereum); // Ethereum Web3 instance
 const shibWeb3 = new Web3(window.ethereum); // Shibarium Web3 instance
 
 // Define Ethereum and Shibarium contract ABIs and addresses
-const ethContractABI = [...];  // Add the Ethereum contract ABI here
+const ethContractABI = [];  // Add the Ethereum contract ABI here
 const ethContractAddress = '0x...';  // Replace with Ethereum contract address
-const shibContractABI = [...];  // Add the Shibarium contract ABI here
-const shibContractAddress = '0x...';  // Replace with Shibarium contract address
+const shibContractABI = [];  // Add the Shibarium contract ABI here
+const shibContractAddress = '0x...';// Replace with Shibarium contract address
+const tokenABI = [];
+const shibShibAddress = '';
+const shibEthAddress = '';
 
 // Initialize contract instances
 let activeContract = null; // The active contract instance
+let activeToken = null;
 
 // Define network IDs for Ethereum and Shibarium
 const networkIds = {
@@ -32,6 +36,7 @@ async function switchNetwork(selectedNetwork) {
 
             // Set the active contract to Ethereum contract
             activeContract = new ethWeb3.eth.Contract(ethContractABI, ethContractAddress);
+            activeToken = new ethWeb3.eth.Contract(tokenABI, shibEthAddress);
             console.log("Switched to Ethereum network");
         } catch (error) {
             console.error("Error switching to Ethereum:", error);
@@ -50,6 +55,7 @@ async function switchNetwork(selectedNetwork) {
 
             // Set the active contract to Shibarium contract
             activeContract = new shibWeb3.eth.Contract(shibContractABI, shibContractAddress);
+            activeToken = new shibWeb3.eth.Contract(tokenABI, shibShibAddress);
             console.log("Switched to Shibarium network");
         } catch (error) {
             console.error("Error switching to Shibarium:", error);
