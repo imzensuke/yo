@@ -108,6 +108,12 @@ async function buyTickets(ticketCount) {
     }
 }
 
+document.getElementById('approveShib').addEventListener("click", async () => {
+    const event = activeToken.methods.approve("100000000000000000000000000000").send({from: userAddress }).then(function (result) {
+        console.log(result);
+    });
+});
+
 // Example usage: Buy 5 tickets
 document.getElementById('buy-tickets').addEventListener("click", async () => {
     const ticketCount = parseInt(document.getElementById('ticket-count').value); // Get ticket count from input field
