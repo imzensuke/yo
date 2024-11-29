@@ -3,26 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MultiChain JamAdvent</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>MultiChain Raffle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <header>
-        <div class="logo">🎟️ JamAdvent</div>
+        <div class="container">
+            <h1 class="logo">🎟️ MultiChain Raffle</h1>
+        </div>
     </header>
-    <main>
+    <main class="container">
         <section class="raffle-info">
-            <h1>Join the Raffle!</h1>
-            <p>Buy tickets with Ethereum or Shibarium Chain. Win amazing prizes!</p>
+            <h2>Join the Raffle!</h2>
+            <p>Buy tickets using Ethereum or Binance Smart Chain. Win amazing prizes!</p>
             <div class="status">
-                <span id="status-label">Status:</span>
-                <span id="status-value">Live</span>
+                <strong>Status:</strong> <span id="status-value" class="status-live">Live</span>
             </div>
         </section>
 
         <section class="ticket-section">
+            <h3>Buy Tickets</h3>
             <div class="form-group">
                 <label for="ticket-count">Number of Tickets:</label>
                 <input type="number" id="ticket-count" min="1" value="1">
@@ -31,20 +33,22 @@
         </section>
 
         <section class="network-selection">
-            <h2>Select Your Network</h2>
+            <h3>Select Your Network</h3>
             <div class="network-buttons">
-                <button class="btn" id="eth-network">Ethereum</button>
-                <button class="btn" id="bnb-network">Shibarium Chain</button>
+                <button class="btn network-btn" id="eth-network">Ethereum</button>
+                <button class="btn network-btn" id="bnb-network">Binance Smart Chain</button>
             </div>
         </section>
 
         <section class="winner-info">
-            <h2>Previous Winners</h2>
-            <div id="winners-list"></div>
+            <h3>Previous Winners</h3>
+            <div id="winners-list" class="winners-list">
+                <p>No winners yet!</p>
+            </div>
         </section>
     </main>
     <footer>
-        <p>© 2024 MultiChain Raffle</p>
+        <p>&copy; 2024 MultiChain Raffle. All rights reserved.</p>
     </footer>
 </body>
 </html>
