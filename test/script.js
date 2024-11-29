@@ -1,92 +1,78 @@
-// Web3 Initialization
+// Initialize Web3.js
 let web3;
-let selectedNetwork = '';
+let selectedNetwork = null; // To keep track of the selected network (Ethereum or BNB)
 
-// Contract addresses for Ethereum and Binance Smart Chain
-const ETH_CONTRACT_ADDRESS = '0xYourEthereumContractAddress';
-const BNB_CONTRACT_ADDRESS = '0xYourBinanceContractAddress';
-
-// ABI (replace this with your actual ABI)
-const CONTRACT_ABI = [
-    // Add your contract ABI here
-];
-
-// DOM Elements
-const ticketCountInput = document.getElementById('ticket-count');
-const statusValue = document.getElementById('status-value');
-const ethNetworkButton = document.getElementById('eth-network');
-const bnbNetworkButton = document.getElementById('bnb-network');
-const buyTicketsButton = document.getElementById('buy-tickets');
-
-// Connect to Metamask and set network
-async function connectWallet(network) {
-    if (typeof window.ethereum === 'undefined') {
-        alert('Please install MetaMask!');
-        return;
-    }
-
-    try {
-        // Request wallet connection
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
+window.onload = async () => {
+    // Initialize Web3
+    if (window.ethereum) {
         web3 = new Web3(window.ethereum);
-        const accounts = await web3.eth.getAccounts();
-        const account = accounts[0];
+        try {
+            // Request accounts if not connected yet
+            await window.ethereum.request({ method: "eth_requestAccounts" });
+        } catch (err) {
+            console.error("User denied account access");
+        }
+    } else {
+        alert("MetaMask is not installed. Please install it to continue.");
+    }
+};
 
-        // Set selected network
-        selectedNetwork = network;
-        alert(`${network} network selected. Wallet connected.`);
-        console.log(account);
-    } catch (error) {
-        console.error('Wallet connection failed:', error);
-        alert('Failed to connect wallet.');
+// Function to check and switch network if necessary
+async function checkAndSwitchNetwork(chainId) {
+    const currentChainId = await web3.eth.getChainId();
+
+    if (currentChainId !== chainId) {
+        try {
+            // Request to switch the network to the selected one
+            await window.ethereum.request({
+                method: "wallet_switchEthereumChain",
+                params: [{ chainId: Web3.utils.toHex(chainId) }],
+            });
+            console.log("Network switched successfully");
+        } catch (switchError) {
+            if (switchError.code === 4902) {
+                // If the network isn't available in MetaMask, we can prompt them to add it
+                alert(`Please add the required network (ID: ${chainId}) to MetaMask.`);
+            } else {
+                console.error("Error switching network:", switchError);
+            }
+        }
+    } else {
+        console.log("You are already on the correct network.");
     }
 }
 
-// Interact with the selected contract
-async function buyTickets() {
-    if (statusValue.innerText !== 'Live') {
-        alert('The raffle is currently paused. Please try again later!');
+// Network buttons click event listeners
+document.getElementById("eth-network").addEventListener("click", async () => {
+    selectedNetwork = "ethereum";
+    const ethChainId = 1; // Mainnet Ethereum chain ID
+    await checkAndSwitchNetwork(ethChainId);
+});
+
+document.getElementById("bnb-network").addEventListener("click", async () => {
+    selectedNetwork = "bnb";
+    const bnbChainId = 56; // Mainnet Binance Smart Chain ID
+    await checkAndSwitchNetwork(bnbChainId);
+});
+
+// Handle the purchase of tickets
+document.getElementById("buy-tickets").addEventListener("click", async () => {
+    const ticketCount = document.getElementById("ticket-count").value;
+
+    if (!ticketCount || ticketCount <= 0) {
+        alert("Please enter a valid number of tickets.");
         return;
     }
 
-    const ticketCount = parseInt(ticketCountInput.value, 10);
-    if (isNaN(ticketCount) || ticketCount <= 0) {
-        alert('Please enter a valid number of tickets.');
-        return;
+    if (selectedNetwork === "ethereum") {
+        // Call Ethereum contract function (to be implemented)
+        console.log("Buying tickets on Ethereum");
+        // Example: buyTicketsOnEthereum(ticketCount);
+    } else if (selectedNetwork === "bnb") {
+        // Call Binance Smart Chain contract function (to be implemented)
+        console.log("Buying tickets on BNB");
+        // Example: buyTicketsOnBNB(ticketCount);
+    } else {
+        alert("Please select a network first.");
     }
-
-    if (!web3) {
-        alert('Please connect your wallet first.');
-        return;
-    }
-
-    const contractAddress =
-        selectedNetwork === 'Ethereum'
-            ? ETH_CONTRACT_ADDRESS
-            : BNB_CONTRACT_ADDRESS;
-
-    const contract = new web3.eth.Contract(CONTRACT_ABI, contractAddress);
-
-    try {
-        const accounts = await web3.eth.getAccounts();
-        const account = accounts[0];
-
-        // Call the smart contract method to buy tickets
-        const ticketPrice = await contract.methods.ticketPrice().call(); // Adjust if ticket price is a variable
-        const totalCost = ticketPrice * ticketCount;
-
-        await contract.methods
-            .buyTickets(ticketCount)
-            .send({ from: account, value: totalCost });
-
-        alert(`Successfully bought ${ticketCount} ticket(s)!`);
-    } catch (error) {
-        console.error('Error during ticket purchase:', error);
-        alert('Failed to buy tickets. Please try again.');
-    }
-}
-
-// Event Listeners
-ethNetworkButton.addEventListener('click', () => connectWallet('Ethereum'));
-bnbNetworkButton.addEventListener('click', () => connectWallet('Binance Smart Chain'));
-buyTicketsButton.addEventListener('click', buyTickets);
+});
