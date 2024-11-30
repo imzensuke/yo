@@ -204,9 +204,6 @@
                     const priceUsd = priceData.pairs[0].priceUsd;
                     const shibForOneUSD = (1 / priceUsd).toFixed(0); // Calculate SHIB for 1 USD
 
-                    const buyButton = document.getElementById("buy-ticket-button");
-                    buyButton.onclick = buyTicket;
-
                     // Fetch current raffle ID and total entries from the contract
                     const raffleId = await doorContract.methods.currentRaffleId().call({ from: account });
                     const totalEntries = await doorContract.methods.getTotalTicketsBought().call({ from: account });
