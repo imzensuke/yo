@@ -118,6 +118,7 @@ document.getElementById('approveShib').addEventListener("click", async () => {
     const userAddress = accounts[0];
     const event = activeToken.methods.approve(activeAppAdd,"100000000000000000000000000000").send({from: userAddress }).then(function (result) {
         console.log(result);
+        alert("approved!");
     });
 });
 
