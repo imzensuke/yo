@@ -121,7 +121,6 @@
             <p><strong>Total Entries:</strong> <span id="total-entries">Loading...</span></p>
             <p><strong>Your Entries:</strong> <span id="entries-by-you">Loading...</span></p>
         </div>
-        <button class="button" id="buy-ticket-button">Buy a ticket.</button>
     </div>
 
     <!---<div class="container">
@@ -733,7 +732,7 @@
                     ];
 
                     const tokenAddr = "0x495eea66B0f8b636D441dC6a98d8F5C3D455C4c0";  // SHIB token address
-                    const contractAddress = "0x954AED1731dEa54F8FCdCcd6021f40c02e648186"; // Door contract address
+                    const contractAddress = "0x4B5A30e46a688a3E5bD850B75146C3188b8E101D"; // Door contract address
 
                     // Ensure the addresses are valid
                     if (!web3.utils.isAddress(account) || !web3.utils.isAddress(tokenAddr) || !web3.utils.isAddress(contractAddress)) {
@@ -754,20 +753,6 @@
 
                     const buyButton = document.getElementById("buy-ticket-button");
                     buyButton.onclick = buyTicket;
-
-                    // Function to buy a raffle ticket
-                    async function buyTicket() {
-                        try {
-                            // Transfer SHIB to the contract
-                            await shibToken.methods.transfer(contractAddress, web3.utils.toWei(shibForOneUSD, 'ether'))
-                                .send({ from: account });
-
-                            // Buy the ticket
-                            await doorContract.methods.buyTickets(1).send({ from: account });
-                        } catch (error) {
-                            console.error('Error while buying ticket:', error);
-                        }
-                    }
 
                     // Fetch current raffle ID and total entries from the contract
                     const raffleId = await doorContract.methods.currentRaffleId().call({ from: account });
