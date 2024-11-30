@@ -40,6 +40,7 @@ async function switchNetwork(selectedNetwork) {
             activeToken = new ethWeb3.eth.Contract(tokenABI, shibEthAddress);
             activeAppAdd = '0xFE00663d6819c5A15CAA2b2CA6fdffF743b9b136';
             console.log("Switched to Ethereum network");
+            alert("Selected: ETH ChainId (1)");
         } catch (error) {
             console.error("Error switching to Ethereum:", error);
             alert("Please make sure you have the Ethereum network added in MetaMask.");
@@ -60,6 +61,7 @@ async function switchNetwork(selectedNetwork) {
             activeToken = new shibWeb3.eth.Contract(tokenABI, shibShibAddress);
             activeAppAdd = '0x4B5A30e46a688a3E5bD850B75146C3188b8E101D';
             console.log("Switched to Shibarium network");
+            alert("Selected: SHIBARIUM ChainId (109)");
         } catch (error) {
             console.error("Error switching to Shibarium:", error);
             alert("Please make sure you have the Shibarium network added in MetaMask.");
@@ -133,10 +135,12 @@ document.getElementById('buy-tickets').addEventListener("click", async () => {
         activeToken = new ethWeb3.eth.Contract(tokenABI, shibEthAddress);
         activeAppAdd = '0xFE00663d6819c5A15CAA2b2CA6fdffF743b9b136';
         console.log("Connected to Ethereum network");
+        alert("Connected to Ethereum network");
     } else if (currentNetwork === networkIds.shib) {
         activeContract = new shibWeb3.eth.Contract(shibContractABI, shibContractAddress);
         activeToken = new shibWeb3.eth.Contract(tokenABI, shibShibAddress);
         activeAppAdd = '0x4B5A30e46a688a3E5bD850B75146C3188b8E101D';
         console.log("Connected to Shibarium network");
+        alert("Connected to Ethereum network");
     }
 })();
