@@ -196,7 +196,6 @@
 
                     // Create contract instances
                     const doorContract = new web3.eth.Contract(abi, contractAddress);
-                    const shibToken = new web3.eth.Contract(tokenabi, tokenAddr);
 
                     // Fetch SHIB price in USD from DEX screener API
                     const priceData = await fetchShibPrice();
